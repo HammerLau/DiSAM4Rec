@@ -1,6 +1,6 @@
 # DiSAM4Rec: Distilled and Sparsity Adaptive Mamba for Sequential Recommendation
 
-This is the official implementation of the paper: **"DiSAM4Rec: Distilled and Sparsity Adaptive Mamba for Sequential Recommendation"**.
+This is the official implementation of the paper: **《DiSAM4Rec: Distilled and Sparsity Adaptive Mamba for Sequential Recommendation》**.
 
 ## 🚀 Overview
 DiSAM4Rec is a novel sequential recommendation framework designed to address user preference diversity and representation degradation in deep architectures. Our model integrates two core components:
