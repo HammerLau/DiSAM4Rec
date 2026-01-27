@@ -1,0 +1,99 @@
+gpu_id: '0'
+log_wandb: False
+
+anti_sparsity: False
+remain_ratio: 0.6
+
+# 蒸馏相关
+use_revit_distill: False # 是否启用 Re-ViT 风格自蒸馏
+lambda_distill: 0.1              # 蒸馏 loss 权重
+distill_method: "cosine"         # "mse" 或 "cosine"
+distill_temperature: 2.0         # logit 蒸馏温度 T
+#distill_layers: [0]         # 前几层 student 索引列表，可扩展，如 [0,1,2]
+distill_layers: [0,1]
+#distill_layers: [0,1,2]
+
+# mamba4rec settings
+hidden_size: 64                 # (int) Number of features in the hidden state.
+num_layers: 1                   # (int) Number of Mamba layers.
+dropout_prob: 0.2               # (float) Dropout rate.
+loss_type: 'CE'                 # (str) Type of loss function. Range in ['BPR', 'CE'].
+data_num_workers: 4
+
+d_state: 32                     # (int) SSM state expansion factor
+d_conv: 4                       # (int) Local convolution width
+expand: 2                       # (int) Block expansion factor
+
+# dataset settings
+dataset: ml-1m
+MAX_ITEM_LIST_LENGTH: 50       # 200 for MovieLens-1M
+#
+##dataset: yelp
+##dataset_path: dataset/yelp
+#MAX_ITEM_LIST_LENGTH: 50
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+TIME_FIELD: timestamp
+RATING_FIELD: rating
+load_col:
+   inter: [user_id, item_id, timestamp, rating]
+
+user_inter_num_interval: "[5,inf)"
+item_inter_num_interval: "[5,inf)"
+
+#dataset: yelp
+#MAX_ITEM_LIST_LENGTH: 50
+#USER_ID_FIELD: user_id
+#ITEM_ID_FIELD: item_id
+#TIME_FIELD: timestamp
+#RATING_FIELD: rating
+#load_col:
+#   inter: [user_id, item_id, timestamp, rating]
+
+#user_inter_num_interval: "[5,inf)"
+#item_inter_num_interval: "[5,inf)"
+#user_inter_num_interval: "[5,100)"
+#item_inter_num_interval: "[5,100)"
+filter_inter_by_user_or_item: True    # (bool) Whether or not to filter inter by user or item.
+
+
+#dataset: amazon-beauty
+#dataset: amazon-sports-outdoors
+## dataset: amazon-video-games
+#dataset: amazon-beauty
+####dataset: Amazon_Video_Games
+##dataset: amazon-fashion-18
+####dataset: Amazon_Fashion
+#MAX_ITEM_LIST_LENGTH: 50
+#field_separator: "\t"
+#seq_separator: " "
+#USER_ID_FIELD: user_id
+#ITEM_ID_FIELD: item_id
+#RATING_FIELD: rating
+#TIME_FIELD: timestamp
+#load_col:
+#    inter: [user_id, item_id, rating, timestamp]
+#NEG_PREFIX: neg_ #指定负采样前缀
+#LABEL_FIELD: label #指定标签
+#ITEM_LIST_LENGTH_FIELD: item_length #指定序列长度域
+#LIST_SUFFIX: _list #指定序列前缀
+#POSITION_FIELD: position_id #指定生成的序列位置id
+#user_inter_num_interval: "[5,inf)" # 5-200 for sports  2-inf for fashion 5-inf for beauty
+#item_inter_num_interval: "[5,200)"
+
+# training settings
+epochs: 50
+train_batch_size: 2048
+learner: adam
+learning_rate: 0.001
+eval_step: 1
+stopping_step: 200
+train_neg_sample_args: ~
+show_progress: True
+
+# evalution settings
+metrics: ['Hit', 'NDCG', 'MRR']
+valid_metric: NDCG@10
+eval_batch_size: 4096
+weight_decay: 0.0
+topk: [10]

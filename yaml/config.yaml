@@ -1,0 +1,258 @@
+model: SIGMA
+gpu_id: '0'
+log_wandb: False
+seed: 2020
+# mamba4rec settings
+hidden_size: 64                # (int) Number of features in the hidden state.
+num_layers: 2                  # (int) Number of GMamba layers.
+#n_blocks: 1                      # (int) Number of Mamba block.
+dropout_prob: 0.2               # (float) Dropout rate.
+loss_type: 'CE'                 # (str) Type of loss function. Range in ['BPR', 'CE'].
+d_state: 32                     # (int) SSM state expansion factor
+d_conv: 4                       # (int) Local convolution width
+expand: 2                       # (int) Block expansion factor
+num_workers: 4
+# GLINT settings
+#layer_norm_eps: 1e-12           # (float) Epsilon value for layer normalization.
+#n_heads: 8                      # (int) Number of attention heads.
+#hidden_dropout_prob: 0.3
+#attn_dropout_prob: 0.3
+#embedding_size: 64
+
+# SMPL4Rec settings
+#selected_features: ['item_id']
+#pooling_mode: 'mean'
+#hidden_act: 'gelu'
+#n_layers: 1
+
+# Latent attention parameters
+#num_latents: 1
+#latent_dim: 64
+#cross_heads: 1
+#cross_dim_head: 64
+#dim: 64
+#output_normalize: True
+
+# dataset settings
+dataset: ml-1m
+MAX_ITEM_LIST_LENGTH: 50       # 200 for MovieLens-1M 50 for ml-20m
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+TIME_FIELD: timestamp
+RATING_FIELD: rating
+load_col:
+    inter: [user_id, item_id, rating, timestamp]
+
+user_inter_num_interval: "[5,inf)"
+item_inter_num_interval: "[5,inf)"
+
+#dataset: yelp
+#MAX_ITEM_LIST_LENGTH: 50
+#USER_ID_FIELD: user_id
+#ITEM_ID_FIELD: item_id
+#TIME_FIELD: timestamp
+#RATING_FIELD: rating
+#load_col:
+#   inter: [user_id, item_id, timestamp, rating]
+#
+#user_inter_num_interval: "[5,inf)"
+#item_inter_num_interval: "[5,inf)"
+#filter_inter_by_user_or_item: True    # (bool) Whether or not to filter inter by user or item.
+
+
+
+#dataset: amazon-beauty
+#dataset: amazon-fashion-18
+##dataset: Amazon_Video_Games
+##dataset: Amazon_Sports_and_Outdoors
+##dataset: amazon-sports-outdoors
+###dataset: Amazon_Fashion
+#MAX_ITEM_LIST_LENGTH: 50
+#field_separator: "\t"
+#seq_separator: " "
+#USER_ID_FIELD: user_id
+#ITEM_ID_FIELD: item_id
+#RATING_FIELD: rating
+#TIME_FIELD: timestamp
+#load_col:
+#    inter: [user_id, item_id, rating, timestamp]
+#user_inter_num_interval: "[5,inf)" # 5-200 for sports  2-inf for fashion 5-inf for beauty
+#item_inter_num_interval: "[5,200)"
+##默认参数
+#NEG_PREFIX: neg_ #指定负采样前缀
+#LABEL_FIELD: label #指定标签
+#ITEM_LIST_LENGTH_FIELD: item_length #指定序列长度域
+#LIST_SUFFIX: _list #指定序列前缀
+#POSITION_FIELD: position_id #指定生成的序列位置id
+
+#load_col:
+#    inter: [user_id, item_id, timestamp]
+#
+
+
+
+
+
+#dataset: yelp
+#dataset_path: dataset/yelp
+#MAX_ITEM_LIST_LENGTH: 50
+#USER_ID_FIELD: user_id
+#ITEM_ID_FIELD: item_id
+#TIME_FIELD: timestamp
+#RATING_FIELD: rating
+#load_col:
+#   inter: [user_id, item_id, timestamp, rating]
+#
+#user_inter_num_interval: "[5,100)"
+#item_inter_num_interval: "[5,100)"
+
+# training settings
+epochs: 50
+train_batch_size: 2048 # 1024 for fashion
+learner: adam
+learning_rate: 0.001
+eval_step: 1
+stopping_step: 1000
+#训练过程中每个正样本对应的负样本数量
+train_neg_sample_args: ~
+#评估过程中每个正样本对应的负样本数量
+#eval_neg_sample_num: 100
+
+# evalution settings
+metrics: ['Hit', 'NDCG', 'MRR']
+valid_metric: Hit@10
+eval_batch_size: 4096
+weight_decay: 0.0
+topk: [10]
+
+# 蒸馏相关
+use_revit_distill: True # 是否启用 Re-ViT 风格自蒸馏
+lambda_distill: 0.1              # 蒸馏 loss 权重
+distill_method: "cosine"         # "mse" 或 "cosine"
+distill_temperature: 2.0         # logit 蒸馏温度 T
+distill_layers: [0]         # 前几层 student 索引列表，可扩展，如 [0,1,2]
+#distill_layers: [0,1]
+#distill_layers: [0,1,2]
+#distill_layers: [0,1,2,3]
+
+
+# 日志和模型保存相关
+logger: True           # 启用日志
+save_log: True         # 是否生成日志文件
+log_dir: "/mnt/e/LRM/code/SIGMA/log"
+
+save_model: True       # 是否保存模型
+checkpoint_dir: "/mnt/e/LRM/code/SIGMA/saved_model"
+
+# ========== 可选时间模块 ==========
+use_time_embedding: False
+time_bins: 1000
+
+# ========== 抗稀疏实验 ==========
+anti_sparsity: True        # 是否启动抗稀疏实验
+remain_ratio: 0.8          # 保留训练集交互对的比例（如 0.5 表示保留50%，删50%）
+random_delete_seed: 1234
+#gpu_id: '0'
+#log_wandb: False
+#seed: 2020
+## mamba4rec settings
+#hidden_size: 64                 # (int) Number of features in the hidden state.
+#num_layers: 1                   # (int) Number of GMamba layers.
+##n_blocks: 1                      # (int) Number of Mamba block.
+#dropout_prob: 0.2               # (float) Dropout rate.
+#loss_type: 'CE'                 # (str) Type of loss function. Range in ['BPR', 'CE'].
+#d_state: 32                     # (int) SSM state expansion factor
+#d_conv: 4                       # (int) Local convolution width
+#expand: 2                       # (int) Block expansion factor
+#
+## GLINT settings
+##layer_norm_eps: 1e-12           # (float) Epsilon value for layer normalization.
+##n_heads: 8                      # (int) Number of attention heads.
+##hidden_dropout_prob: 0.3
+##attn_dropout_prob: 0.3
+##embedding_size: 64
+#
+## SMPL4Rec settings
+##selected_features: ['item_id']
+##pooling_mode: 'mean'
+##hidden_act: 'gelu'
+##n_layers: 1
+#
+## Latent attention parameters
+##num_latents: 1
+##latent_dim: 64
+##cross_heads: 1
+##cross_dim_head: 64
+##dim: 64
+##output_normalize: True
+#
+## dataset settings
+##dataset: ml-1m
+##MAX_ITEM_LIST_LENGTH: 200       # 200 for MovieLens-1M 50 for ml-20m
+##USER_ID_FIELD: user_id
+##ITEM_ID_FIELD: item_id
+##TIME_FIELD: timestamp
+##RATING_FIELD: rating
+##load_col:
+##    inter: [user_id, item_id, rating, timestamp]
+#
+##user_inter_num_interval: "[5,inf)"
+##item_inter_num_interval: "[5,inf)"
+##filter_inter_by_user_or_item: True    # (bool) Whether or not to filter inter by user or item.
+#
+##dataset: amazon-beauty
+##dataset: amazon-sports-outdoors
+#dataset: amazon-fashion-18
+##dataset: amazon-video-games
+##dataset: Amazon_Sports_and_Outdoors
+##dataset: Amazon_Fashion
+#MAX_ITEM_LIST_LENGTH: 50
+#field_separator: "\t"
+#seq_separator: " "
+#USER_ID_FIELD: user_id
+#ITEM_ID_FIELD: item_id
+#RATING_FIELD: rating
+#TIME_FIELD: timestamp
+#load_col:
+#    inter: [user_id, item_id, rating, timestamp]
+#NEG_PREFIX: neg_ #指定负采样前缀
+#LABEL_FIELD: label #指定标签
+#ITEM_LIST_LENGTH_FIELD: item_length #指定序列长度域
+#LIST_SUFFIX: _list #指定序列前缀
+#POSITION_FIELD: position_id #指定生成的序列位置id
+#user_inter_num_interval: "[2,inf)" # 5-200 for sports  2-inf for fashion 5-inf for beauty
+#item_inter_num_interval: "[5,200)"
+#
+#
+#
+#
+##dataset: yelp
+##MAX_ITEM_LIST_LENGTH: 50
+##USER_ID_FIELD: user_id
+##ITEM_ID_FIELD: business_id
+##TIME_FIELD: date
+##RATING_FIELD: stars
+##load_col:
+##   inter: [user_id, business_id, stars, date]
+#
+##user_inter_num_interval: "[5,100)"
+##item_inter_num_interval: "[5,100)"
+#
+## training settings
+#epochs: 1000
+#train_batch_size: 2048 # 1024 for fashion
+#learner: adam
+#learning_rate: 0.001
+#eval_step: 1
+#stopping_step: 1000
+##训练过程中每个正样本对应的负样本数量
+#train_neg_sample_args: ~
+##评估过程中每个正样本对应的负样本数量
+#eval_neg_sample_num: 100
+#
+## evalution settings
+#metrics: ['Hit', 'NDCG', 'MRR']
+#valid_metric: NDCG@10
+#eval_batch_size: 4096
+#weight_decay: 0.0
+#topk: [10]

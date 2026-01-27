@@ -1,0 +1,36 @@
+# case_config.yaml — 用于 Case Study 分析的配置文件
+
+# 基础设置
+model: SIGMA                # 模型类名称
+dataset: ml-1m              # 你实际使用的数据集名称（可以改成 Games / Yelp / Steam 等）
+seed: 2025
+gpu_id: 0
+
+# 数据与路径设置
+data_path: dataset     # 按你项目结构改，例如 ../dataset/ml-1m/
+checkpoint_dir: saved_model
+save_model: False
+save_dataset: False
+
+# 模型参数（与训练时保持一致）
+embedding_size: 64
+hidden_size: 64
+num_layers: 2
+dropout_prob: 0.2
+attn_dropout_prob: 0.2
+hidden_dropout_prob: 0.2
+activation: relu
+n_heads: 2
+max_seq_length: 50
+
+# 训练参数（case study 不训练，但 RecBole 初始化需要）
+learning_rate: 1e-3
+epochs: 1
+train_batch_size: 128
+eval_batch_size: 128
+
+# 日志与输出
+log_wandb: False
+log_interval: 100
+eval_interval: 1
+state: case_study
