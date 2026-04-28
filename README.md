@@ -27,7 +27,7 @@ We conducted 7 comprehensive experiments (including ablation studies, sensitivit
   
 @article{Liu2026DiSAM4Rec,
   title={DiSAM4Rec: Distilled and Sparsity Adaptive Mamba for Sequential Recommendation},
-  author={Ruiming Liu, et al.},
+  author={Ruiming Liu, Zhi Liu, Xincheng Xia, Qing Qing.},
   journal={Journal of Intelligent Information Systems},
   year={2026}
 }
